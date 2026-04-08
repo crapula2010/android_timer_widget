@@ -1,0 +1,9 @@
+plugins {
+    id 'com.android.application' version '8.1.1' apply false
+}
+
+project.ext {
+    compileSdk = 34
+    minSdk = 26
+    targetSdk = 34
+}

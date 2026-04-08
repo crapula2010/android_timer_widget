@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Timer Widget</string>
+    <string name="widget_name">Timer Widget</string>
+    <string name="widget_description">A customizable timer widget that supports multiple instances with individual names</string>
+    <string name="reset_confirm_title">Reset timer?</string>
+    <string name="reset_confirm_message">This will clear the accumulated usage time for %1$s.</string>
+    <string name="reset_confirm_positive">Reset</string>
+    <string name="reset_confirm_negative">Cancel</string>
+</resources>

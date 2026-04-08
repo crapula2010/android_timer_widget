@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:gravity="center_vertical"
+    android:background="@android:color/white">
+
+    <!-- Timer Name -->
+    <TextView
+        android:id="@+id/timer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Timer"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_marginBottom="6dp" />
+
+    <!-- Timer Display -->
+    <TextView
+        android:id="@+id/timer_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="0000:00:00"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:fontFamily="monospace"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="10dp" />
+
+    <!-- Control Buttons Layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- Start/Stop Button -->
+        <Button
+            android:id="@+id/btn_start_stop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Start"
+            android:textSize="12sp"
+            android:padding="6dp" />
+
+        <!-- Reset Button -->
+        <Button
+            android:id="@+id/btn_reset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:text="Reset"
+            android:textSize="12sp"
+            android:padding="6dp" />
+
+        <!-- Edit Button -->
+        <Button
+            android:id="@+id/btn_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:text="Edit"
+            android:textSize="12sp"
+            android:padding="6dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,17 @@
+.gradle/
+.idea/
+*.iml
+*.apk
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+build/
+.gradle
+local.properties
+/app/build/
+/gradle/*
+!/gradle/wrapper/
+!/gradle/wrapper/gradle-wrapper.jar
+!/gradle/wrapper/gradle-wrapper.properties

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Available Timers List Label -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restore Existing Timer"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Available Timers List -->
+    <ListView
+        android:id="@+id/timer_list"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Timer Name Input -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Timer Name"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/edit_timer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="e.g., Vinyl Cartridge A"
+        android:inputType="text"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Elapsed Time Adjustment Label -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current Usage (Optional - set manually if needed)"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Hours Input -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hours (0-9999)"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/edit_hours"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="0"
+        android:inputType="number"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Minutes Input -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Minutes (0-59)"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/edit_minutes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="0"
+        android:inputType="number"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Seconds Input -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seconds (0-59)"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/edit_seconds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="0"
+        android:inputType="number"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Button Layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:spacing="8dp">
+
+        <Button
+            android:id="@+id/btn_dialog_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/btn_dialog_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save" />
+
+    </LinearLayout>
+
+</LinearLayout>
