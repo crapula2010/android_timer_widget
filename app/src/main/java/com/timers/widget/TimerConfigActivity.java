@@ -79,7 +79,7 @@ public class TimerConfigActivity extends AppCompatActivity {
             selectedTimerId = existingTimerId;
             editTimerName.setText(TimerData.getTimerName(this, existingTimerId));
             
-            long elapsedMillis = TimerData.getElapsedMillis(this, existingTimerId);
+            long elapsedMillis = TimerData.getDisplayTime(this, existingTimerId);
             long totalSeconds = elapsedMillis / 1000;
             long hours = totalSeconds / 3600;
             long minutes = (totalSeconds % 3600) / 60;
@@ -119,7 +119,7 @@ public class TimerConfigActivity extends AppCompatActivity {
     private void loadTimerDetails(String timerId) {
         editTimerName.setText(TimerData.getTimerName(this, timerId));
         
-        long elapsedMillis = TimerData.getElapsedMillis(this, timerId);
+        long elapsedMillis = TimerData.getDisplayTime(this, timerId);
         long totalSeconds = elapsedMillis / 1000;
         long hours = totalSeconds / 3600;
         long minutes = (totalSeconds % 3600) / 60;

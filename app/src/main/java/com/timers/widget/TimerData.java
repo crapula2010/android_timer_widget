@@ -17,7 +17,7 @@ public class TimerData {
     
     // Timer-specific keys
     private static final String TIMER_NAME_PREFIX = "timer_name_";
-    private static final String TIMER_ELAPSED_MILLIS_PREFIX = "timer_elapsed_millis_"; // Total accumulated time
+    private static final String TIMER_LAST_STORED_VALUE_PREFIX = "timer_last_stored_"; // Last stored milliseconds
     private static final String TIMER_RUNNING_PREFIX = "timer_running_";
     private static final String TIMER_START_TIME_PREFIX = "timer_start_time_"; // When timer was started (epoch ms)
     private static final String TIMER_CREATED_PREFIX = "timer_created_"; // When timer was created
@@ -30,9 +30,9 @@ public class TimerData {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        // Store timer data - starts at 0 elapsed time
+        // Store timer data - starts at 0 with no running state
         editor.putString(TIMER_NAME_PREFIX + timerId, name);
-        editor.putLong(TIMER_ELAPSED_MILLIS_PREFIX + timerId, 0);
+        editor.putLong(TIMER_LAST_STORED_VALUE_PREFIX + timerId, 0);
         editor.putBoolean(TIMER_RUNNING_PREFIX + timerId, false);
         editor.putLong(TIMER_CREATED_PREFIX + timerId, System.currentTimeMillis());
 
@@ -97,27 +97,30 @@ public class TimerData {
 
     /**
      * Set if timer is running
+     * If running=true: records the start time
+     * If running=false: updates stored value with elapsed time since start, clears start time
      */
     public static void setTimerRunning(Context context, String timerId, boolean running) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(TIMER_RUNNING_PREFIX + timerId, running);
-        
+
         if (running) {
-            // Record when timer started
+            // Start the timer: record when it started
+            editor.putBoolean(TIMER_RUNNING_PREFIX + timerId, true);
             editor.putLong(TIMER_START_TIME_PREFIX + timerId, System.currentTimeMillis());
         } else {
-            // When stopped, calculate elapsed time and add to total
+            // Stop the timer: update stored value + elapsed time, then clear running state
             long startTime = prefs.getLong(TIMER_START_TIME_PREFIX + timerId, 0);
             if (startTime > 0) {
                 long elapsed = System.currentTimeMillis() - startTime;
-                long totalElapsed = prefs.getLong(TIMER_ELAPSED_MILLIS_PREFIX + timerId, 0);
-                totalElapsed += elapsed;
-                editor.putLong(TIMER_ELAPSED_MILLIS_PREFIX + timerId, totalElapsed);
+                long storedValue = prefs.getLong(TIMER_LAST_STORED_VALUE_PREFIX + timerId, 0);
+                storedValue += elapsed;
+                editor.putLong(TIMER_LAST_STORED_VALUE_PREFIX + timerId, storedValue);
             }
+            editor.putBoolean(TIMER_RUNNING_PREFIX + timerId, false);
             editor.remove(TIMER_START_TIME_PREFIX + timerId);
         }
-        
+
         editor.apply();
     }
 
@@ -130,39 +133,46 @@ public class TimerData {
     }
 
     /**
-     * Get calculated elapsed time (accounts for current session if running)
+     * Get the display time (stored value + current session elapsed if running)
      */
-    public static long getElapsedMillis(Context context, String timerId) {
+    public static long getDisplayTime(Context context, String timerId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        long totalElapsed = prefs.getLong(TIMER_ELAPSED_MILLIS_PREFIX + timerId, 0);
+        long storedValue = prefs.getLong(TIMER_LAST_STORED_VALUE_PREFIX + timerId, 0);
         
         // If running, add current session elapsed time
         if (prefs.getBoolean(TIMER_RUNNING_PREFIX + timerId, false)) {
             long startTime = prefs.getLong(TIMER_START_TIME_PREFIX + timerId, 0);
             if (startTime > 0) {
                 long currentSessionElapsed = System.currentTimeMillis() - startTime;
-                totalElapsed += currentSessionElapsed;
+                storedValue += currentSessionElapsed;
             }
         }
         
-        return totalElapsed;
+        return storedValue;
+    }
+
+    /**
+     * Directly set the stored milliseconds (for edit functionality)
+     */
+    public static void setStoredValue(Context context, String timerId, long millis) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putLong(TIMER_LAST_STORED_VALUE_PREFIX + timerId, millis).apply();
     }
 
     /**
      * Directly set elapsed milliseconds
      */
     public static void setElapsedMillis(Context context, String timerId, long millis) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putLong(TIMER_ELAPSED_MILLIS_PREFIX + timerId, millis).apply();
+        setStoredValue(context, timerId, millis);
     }
 
     /**
-     * Reset timer to 0
+     * Reset timer to 0 and stop if running
      */
     public static void resetTimer(Context context, String timerId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(TIMER_ELAPSED_MILLIS_PREFIX + timerId, 0);
+        editor.putLong(TIMER_LAST_STORED_VALUE_PREFIX + timerId, 0);
         editor.putBoolean(TIMER_RUNNING_PREFIX + timerId, false);
         editor.remove(TIMER_START_TIME_PREFIX + timerId);
         editor.apply();
@@ -202,7 +212,7 @@ public class TimerData {
         
         // Remove timer data
         editor.remove(TIMER_NAME_PREFIX + timerId);
-        editor.remove(TIMER_ELAPSED_MILLIS_PREFIX + timerId);
+        editor.remove(TIMER_LAST_STORED_VALUE_PREFIX + timerId);
         editor.remove(TIMER_RUNNING_PREFIX + timerId);
         editor.remove(TIMER_START_TIME_PREFIX + timerId);
         editor.remove(TIMER_CREATED_PREFIX + timerId);

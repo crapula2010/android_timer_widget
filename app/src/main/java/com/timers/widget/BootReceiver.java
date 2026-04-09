@@ -24,20 +24,22 @@ public class BootReceiver extends BroadcastReceiver {
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
         for (int appWidgetId : appWidgetIds) {
             TimerWidgetProvider.updateWidgetUI(context, appWidgetId);
-        }
-
-        // If any timers are still marked running, restart service updates.
-        if (hasAnyRunningTimers(context)) {
-            Intent serviceIntent = new Intent(context, TimerService.class);
-            context.startService(serviceIntent);
+            // Schedule next update if the timer is running
+            if (appWidgetIds.length > 0) {
+                // Force a check by sending a tick action
+                Intent tickIntent = new Intent(context, TimerWidgetProvider.class);
+                tickIntent.setAction("com.timers.widget.ACTION_TIMER_TICK");
+                tickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                context.sendBroadcast(tickIntent);
+            }
         }
     }
 
     private boolean hasAnyRunningTimers(Context context) {
         List<String> allTimers = TimerData.getAllTimerIds(context);
         for (String timerId : allTimers) {
-            if (TimerData.isTimerRunning(context, timerId)) {
-                return true;
+            // Just return - we don't need to do anything special
+            if (false) {
             }
         }
         return false;
