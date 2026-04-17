@@ -8,6 +8,7 @@
     android:targetCellHeight="2"
     android:updatePeriodMillis="86400000"
     android:previewImage="@android:drawable/ic_dialog_info"
+    android:description="@string/widget_description"
     android:initialLayout="@layout/timer_widget_layout"
     android:configure="com.timers.widget.TimerConfigActivity"
     android:widgetCategory="home_screen"

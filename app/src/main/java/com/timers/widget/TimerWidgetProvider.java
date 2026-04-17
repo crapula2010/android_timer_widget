@@ -14,6 +14,19 @@ import android.widget.RemoteViews;
  */
 public class TimerWidgetProvider extends AppWidgetProvider {
 
+    public static void refreshAllWidgets(Context context) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
+                new android.content.ComponentName(context, TimerWidgetProvider.class)
+        );
+
+        TimerWidgetProvider provider = new TimerWidgetProvider();
+        for (int appWidgetId : appWidgetIds) {
+            updateWidgetUI(context, appWidgetId);
+            provider.scheduleNextUpdateIfRunning(context, appWidgetId);
+        }
+    }
+
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {

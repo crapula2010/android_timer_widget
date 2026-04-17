@@ -7,4 +7,20 @@
     <string name="reset_confirm_message">This will clear the accumulated usage time for %1$s.</string>
     <string name="reset_confirm_positive">Reset</string>
     <string name="reset_confirm_negative">Cancel</string>
+    <string name="home_title">Timer Widget</string>
+    <string name="home_message">If the widget is missing, long-press your home screen and add Timer Widget from the Widgets list.</string>
+    <string name="backup_status_not_connected">Google Drive backup: not connected</string>
+    <string name="backup_status_connected">Google Drive backup connected for %1$s</string>
+    <string name="backup_connect">Connect Drive + Enable Daily Backup</string>
+    <string name="backup_now">Backup Now</string>
+    <string name="restore_latest">Restore Latest Backup</string>
+    <string name="backup_disable">Disable Drive Backup</string>
+    <string name="backup_done">Backup uploaded to Drive/timers_backup</string>
+    <string name="backup_queued">Backup queued. It will upload when network is available.</string>
+    <string name="backup_failed">Backup failed: %1$s</string>
+    <string name="backup_disabled">Drive backup disabled</string>
+    <string name="restore_done">Restore complete. Widgets refreshed.</string>
+    <string name="restore_none">No backup file found in Drive/timers_backup.</string>
+    <string name="restore_failed">Restore failed: %1$s</string>
+    <string name="signin_failed_10">Sign-in failed (10). Check Google Cloud OAuth Android client package and SHA-1 for this build.</string>
 </resources>

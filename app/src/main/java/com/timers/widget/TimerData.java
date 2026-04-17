@@ -3,6 +3,10 @@ package com.timers.widget;
 import android.content.Context;
 import android.content.SharedPreferences;
 import java.util.*;
+import java.util.Iterator;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Utility class for managing stopwatch/usage timer data storage and retrieval.
@@ -235,5 +239,99 @@ public class TimerData {
         if (hours > 9999) hours = 9999;
 
         return String.format("%04d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    /**
+     * Export all timer preferences into a JSON snapshot for cloud backup.
+     */
+    public static String exportBackupJson(Context context) throws JSONException {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        Map<String, ?> allPrefs = prefs.getAll();
+
+        JSONObject root = new JSONObject();
+        root.put("formatVersion", 1);
+        root.put("packageName", context.getPackageName());
+        root.put("exportedAtEpochMs", System.currentTimeMillis());
+
+        JSONObject prefJson = new JSONObject();
+        for (Map.Entry<String, ?> entry : allPrefs.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (value == null) {
+                prefJson.put(key, JSONObject.NULL);
+            } else if (value instanceof Set) {
+                JSONArray arr = new JSONArray();
+                for (Object item : (Set<?>) value) {
+                    arr.put(item == null ? JSONObject.NULL : item.toString());
+                }
+                prefJson.put(key, arr);
+            } else {
+                prefJson.put(key, value);
+            }
+        }
+
+        root.put("prefs", prefJson);
+        return root.toString();
+    }
+
+    /**
+     * Import a backup snapshot and replace current timer preferences.
+     */
+    public static void importBackupJson(Context context, String json) throws JSONException {
+        JSONObject root = new JSONObject(json);
+        JSONObject prefJson = root.getJSONObject("prefs");
+
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+
+        Iterator<String> keys = prefJson.keys();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            Object value = prefJson.opt(key);
+            putJsonValue(editor, key, value);
+        }
+
+        // Commit synchronously so widget refresh reads restored values immediately.
+        editor.commit();
+    }
+
+    private static void putJsonValue(SharedPreferences.Editor editor, String key, Object value)
+            throws JSONException {
+        if (value == null || value == JSONObject.NULL) {
+            return;
+        }
+
+        if (value instanceof Boolean) {
+            editor.putBoolean(key, (Boolean) value);
+            return;
+        }
+
+        if (value instanceof Number) {
+            Number num = (Number) value;
+            double asDouble = num.doubleValue();
+            long asLong = num.longValue();
+            if (asDouble == asLong) {
+                editor.putLong(key, asLong);
+            } else {
+                editor.putFloat(key, (float) asDouble);
+            }
+            return;
+        }
+
+        if (value instanceof JSONArray) {
+            JSONArray arr = (JSONArray) value;
+            Set<String> set = new LinkedHashSet<>();
+            for (int i = 0; i < arr.length(); i++) {
+                Object item = arr.opt(i);
+                if (item != null && item != JSONObject.NULL) {
+                    set.add(String.valueOf(item));
+                }
+            }
+            editor.putStringSet(key, set);
+            return;
+        }
+
+        editor.putString(key, String.valueOf(value));
     }
 }
