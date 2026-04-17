@@ -70,6 +70,38 @@ When you add a new widget instance:
 2. Select one to restore it on the new widget
 3. The accumulated time and state are preserved
 
+## Google Drive Backup and Restore
+
+The app supports:
+- Manual backup upload to Google Drive
+- Daily scheduled backup upload (when network is available)
+- Restoring the latest backup from Drive
+
+Backups are stored in a folder named `timers_backup` in your Google Drive.
+
+### Google Cloud Setup (Required)
+
+1. Create or select a Google Cloud project.
+2. Enable **Google Drive API** in that project.
+3. Configure OAuth consent screen:
+	- Set publishing status to **Testing** for personal/internal use.
+	- Add test users who are allowed to sign in.
+4. Create an **OAuth 2.0 Client ID** of type **Android**.
+5. Use your app package name and signing SHA-1 fingerprint for that client.
+
+If sign-in shows `Sign-in failed: 10`, the package name and SHA-1 in the OAuth Android client usually do not match the installed app build.
+
+### Requesting Access
+
+If you are not already a test user on the OAuth consent screen, request access by email.
+
+- Access requests: **email crappy.crapula8@gmail.com with your Google account address and mention "Timer Widget Drive backup access request" in the subject line**
+
+When prompted by Google for an unverified testing app, choose:
+1. **Advanced**
+2. **Go to timers (unsafe)**
+3. Continue and grant access
+
 ## Classes Overview
 
 ### TimerData
